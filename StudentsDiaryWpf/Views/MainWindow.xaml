@@ -7,16 +7,35 @@
         xmlns:local="clr-namespace:StudentsDiaryWpf"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
-        Title="Dziennik Ucznia" Height="450" Width="1140">
+        Title="Dziennik Ucznia" Height="450" Width="1200">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Button Content="Dodaj" Height="25" Width="100" Margin="5"/>
-            <Button Content="Edytuj" Height="25" Width="100" Margin="5"/>
-            <Button Content="Usuń" Height="25" Width="100" Margin="5"/>
+            <Button 
+                Command="{Binding AddStudentCommand}" 
+                Content="Dodaj" 
+                Height="25" 
+                Width="100" 
+                Margin="5"
+            />
+            <Button 
+                Command="{Binding EditStudentCommand}"
+                CommandParameter="{Binding SelectedStudent}"
+                Content="Edytuj" 
+                Height="25" 
+                Width="100" 
+                Margin="5"
+            />
+            <Button 
+                Command="{Binding DeleteStudentCommand}" 
+                Content="Usuń" 
+                Height="25" 
+                Width="100" 
+                Margin="5"
+            />
             <ComboBox 
                 Height="25" 
                 Width="150" 
@@ -25,8 +44,21 @@
                 SelectedValue="{Binding SelectedGroupId}"
                 DisplayMemberPath="Name"
                 SelectedValuePath="Id"
-                />
-            <Button Command="{Binding RefreshStudentCommand}" Content="Odśwież" Height="25" Width="100" Margin="5"/>
+            />
+            <Button 
+                Command="{Binding RefreshStudentsCommand}" 
+                Content="Odśwież" 
+                Height="25" 
+                Width="100" 
+                Margin="5"
+            />
+            <Button 
+                Command="{Binding PropertiesCommand}"
+                Content="Ustawienia" 
+                Height="25" 
+                Width="100" 
+                Margin="5"
+            />
         </StackPanel>
         <DataGrid 
             ItemsSource="{Binding Students}"

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace StudentsDiaryWpf.Models
 {
-    public class Group
+    internal enum Subject
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        Math = 1, Physics, Technology, History, Geography, Biology, PolishLanguage, EnglishLanguage
     }
 }
