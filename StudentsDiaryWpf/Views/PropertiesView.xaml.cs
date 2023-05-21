@@ -24,10 +24,10 @@ namespace StudentsDiaryWpf.Views
     /// </summary>
     public partial class PropertiesView : MetroWindow
     {
-        public PropertiesView()
+        public PropertiesView(bool IsPropertiesChangedWhileRunning)
         {
             InitializeComponent();
-            DataContext = new PropertiesModelView();
+            DataContext = new PropertiesModelView(IsPropertiesChangedWhileRunning);
         }
     }
 }

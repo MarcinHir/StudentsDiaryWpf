@@ -27,19 +27,21 @@ namespace StudentsDiaryWpf.View_Models
             EditStudentCommand = new RelayCommand(AddEditStudent, CanEditDeleteStudent);
             DeleteStudentCommand = new AsyncRelayCommand(DeleteStudent, CanEditDeleteStudent);
             PropertiesCommand = new RelayCommand(Properties);
+            LoadedWindowCommand = new RelayCommand(LoadedWindow);
 
-            RefreshDiary();
-            InitGroups();
+            LoadedWindow(null);
+            
         }
 
-
-
+        
 
         public ICommand AddStudentCommand { get; set; }
         public ICommand EditStudentCommand { get; set; }
         public ICommand DeleteStudentCommand { get; set; }
         public ICommand RefreshStudentsCommand { get; set; }
         public ICommand PropertiesCommand { get; set; }
+        public ICommand LoadedWindowCommand { get; set; }
+
 
 
 
@@ -48,6 +50,30 @@ namespace StudentsDiaryWpf.View_Models
         private ObservableCollection<StudentWrapper> _students;
         private ObservableCollection<Group> _groups;
         private int _selectedGroupId;
+
+        private async void LoadedWindow(object obj)
+        {
+            if (!IfConnectionToDatabaseIsValid())
+            {
+                var MetroWindow = Application.Current.MainWindow as MetroWindow;
+                var dialog = await MetroWindow.ShowMessageAsync("Łączenie z bazą danych", "Nie można połączyć z bazą danych. Zmienić ustawienia?", MessageDialogStyle.AffirmativeAndNegative);
+
+                if (dialog == MessageDialogResult.Negative)
+                {
+                    Application.Current.Shutdown();
+                }
+                else
+                {
+                    var propertiesWindow = new PropertiesView(false);
+                    propertiesWindow.ShowDialog();
+                }
+            }
+            else
+            {
+                RefreshDiary();
+                InitGroups();
+            }
+        }
 
         public int SelectedGroupId
         {
@@ -152,7 +178,7 @@ namespace StudentsDiaryWpf.View_Models
 
         private void Properties(object obj)
         {
-            var propertiesWindow = new PropertiesView();
+            var propertiesWindow = new PropertiesView(true);
             propertiesWindow.Closed += PropertiesWindow_Closed;
             propertiesWindow.Show();
         }
@@ -160,6 +186,24 @@ namespace StudentsDiaryWpf.View_Models
         private void PropertiesWindow_Closed(object sender, EventArgs e)
         {
             RefreshDiary();
+        }
+
+        private bool IfConnectionToDatabaseIsValid()
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    context.Database.Connection.Open();
+                    context.Database.Connection.Close();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
     }
 }

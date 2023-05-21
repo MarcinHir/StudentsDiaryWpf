@@ -19,6 +19,7 @@ namespace StudentsDiaryWpf.View_Models
     internal class PropertiesModelView : ViewModelBase
     {
         private DbProperties _dbProperties;
+        private readonly bool _IsPropertiesChangedWhileRunning;
         public DbProperties DbProperties {
             get
             {
@@ -30,12 +31,13 @@ namespace StudentsDiaryWpf.View_Models
                 OnPropertyChanged();
             }
         }
-        public PropertiesModelView()
+        public PropertiesModelView(bool IsPropertiesChangedWhileRunning)
         {
             CloseCommand = new RelayCommand(Close);
             ConfirmCommand = new RelayCommand(Confirm);
             DefaultCommand = new RelayCommand(Default);
             _dbProperties = new DbProperties();
+            _IsPropertiesChangedWhileRunning = IsPropertiesChangedWhileRunning;
         }
 
         public ICommand CloseCommand { get; set; }
@@ -45,7 +47,10 @@ namespace StudentsDiaryWpf.View_Models
 
         private void Close(object obj)
         {
-            CloseWindow(obj as Window);
+            if (_IsPropertiesChangedWhileRunning)
+                CloseWindow(obj as Window);
+            else
+                Application.Current.Shutdown();
         }
         
         private void Confirm(object obj)
@@ -73,7 +78,11 @@ namespace StudentsDiaryWpf.View_Models
             _dbProperties.Login = "Marcin";
             _dbProperties.Password = "123";
             OnPropertyChanged();
-            
+            CloseWindow(obj as Window);
+            var propertiesWindow = new PropertiesView(true);
+            propertiesWindow.Show();
+
+
 
 
         }
