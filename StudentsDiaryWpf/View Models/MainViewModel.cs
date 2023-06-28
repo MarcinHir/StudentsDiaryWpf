@@ -205,5 +205,6 @@ namespace StudentsDiaryWpf.View_Models
             }
 
         }
+
     }
 }

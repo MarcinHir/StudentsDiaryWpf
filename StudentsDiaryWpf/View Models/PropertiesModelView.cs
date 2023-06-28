@@ -20,6 +20,7 @@ namespace StudentsDiaryWpf.View_Models
     {
         private DbProperties _dbProperties;
         private readonly bool _IsPropertiesChangedWhileRunning;
+
         public DbProperties DbProperties {
             get
             {
